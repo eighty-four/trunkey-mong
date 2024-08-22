@@ -1,8 +1,7 @@
 {
-<<<<<<< HEAD
   "dependencies": {
     "express": "^4.19.2"
-=======
+  },
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
@@ -38,6 +37,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> 72241b0 (moojik play)
   }
 }
