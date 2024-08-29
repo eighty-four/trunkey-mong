@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Player = () => {
     const musicNames = ["Home Stretch - Gunnar Olsen.opus", "Trancer - Gunnar Olsen.opus", "Tremsz - Gunnar Olsen.opus"]
@@ -7,6 +7,7 @@ const Player = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     //const [musicRef, setMusicRef] = useState(new Audio("/music/" + musicNames[nowPlaying]));
     const [musicRefs, setMusicRefs] = useState(musicNames.map((name) => {return new Audio("/music/" + name)}));
+    const sliderRef = useRef(null);
 
     const playNewMusic = (index) => {
         musicRefs[nowPlaying].pause()
@@ -16,6 +17,7 @@ const Player = () => {
     }
 
     const toggleMusic = () => {
+        console.log(musicRefs)
         if (isPlaying) {
           musicRefs[nowPlaying].pause();
         } else {
@@ -29,6 +31,15 @@ const Player = () => {
         setIsPlaying(false);
         musicRefs[nowPlaying].pause();
     };
+
+    const moveToFraction = (fraction) => {
+        musicRefs[nowPlaying].currentTime = musicRefs[nowPlaying].duration * fraction
+    };
+/*
+    useEffect(() => {
+        moveToFraction(sliderRef.current.value);
+    }, [sliderRef]);*/
+
   return (
     <>
         <ul>
@@ -36,6 +47,16 @@ const Player = () => {
                 <li key={index} onClick={() => {playNewMusic(index)}} className={`${index == nowPlaying && "bg-gray-300 text-blue-500"}`}>{name}</li>
             ))}
         </ul>
+
+        <input
+            type="range"
+            ref={sliderRef}
+            value={(musicRefs[nowPlaying].currentTime) ? musicRefs[nowPlaying].currentTime/musicRefs[nowPlaying].duration : 0}
+            onInput={() => moveToFraction(sliderRef.current.value)}
+            min={0}
+            max={1}
+            step={0.0001}
+        />
 
         <button onClick={toggleMusic} className={`${
             isPlaying ? "bg-red-500 hover:bg-red-700" : "bg-green-500 hover:bg-green-700"
